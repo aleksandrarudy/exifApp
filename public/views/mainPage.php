@@ -8,8 +8,9 @@
     <script src="https://kit.fontawesome.com/c7d1b0ffc1.js" crossorigin="anonymous"></script>
     <title>EXIF app | Generate exif file from image</title>
     <script type="text/javascript" src="./public/js/preview.js" defer></script>
-    <script type="text/javascript" src="./public/js/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="./public/js/jquery-3.6.1.js"></script>
     <script type="text/javascript" src="./public/js/jquery.exif.js"></script>
+
 </head>
 <body>
     <div class = "dashboard-container">
@@ -27,33 +28,35 @@
                     </div>
 
                 </div>
-                <div class="exif-container">
-                    <div class="exifdata-placeholder">
-                        <div class="image-data">
-                            <label for="cameraModel">camera model</label></br>
-                            <input type="text" name="cameraModel" id="cameraModel" /> </br>
+                <script type="text/javascript" src="./public/js/download-data.js" ></script>
 
-                            <label for="exposure">exposure</label></br>
-                            <input type="text" name="exposure" id="exposure" /> </br>
+                    <div class="exif-container">
+                        <div class="exifdata-placeholder">
+                            <div class="image-data">
+                                <label for="cameraModel">camera model</label></br>
+                                <input type="text" name="cameraModel" id="cameraModel" placeholder="ex. Canon r6"/> </br>
 
-                            <label for="iso">ISO</label></br>
-                            <input type="text" name="iso" id="iso" /> </br>
+                                <label for="exposure">exposure</label></br>
+                                <input type="text" name="exposure" id="exposure" placeholder="ex. 1/200"/></br>
 
-                            <label for="aperture">aperture</label></br>
-                            <input type="text" name="aperture" id="aperture" /> </br>
+                                <label for="iso">ISO</label></br>
+                                <input type="text" name="iso" id="iso" placeholder="ex. 200" /> </br>
 
-                            <label for="focus">focus length</label></br>
-                            <input type="text" name="focus" id="focus" /> </br>
+                                <label for="aperture">aperture</label></br>
+                                <input type="text" name="aperture" id="aperture" placeholder="ex. f/1.8" /> </br>
 
-                            <label for="flash">flash</label></br>
-                            <input type="text" name="flash" id="flash" /> </br>
+                                <label for="focus">focus length</label></br>
+                                <input type="text" name="focus" id="focus" placeholder="ex. 35mm"/> </br>
 
+                                <label for="flash">flash</label></br>
+                                <input type="text" name="flash" id="flash" placeholder="ex. Flash fired"/> </br>
+
+                            </div>
+                        </div>
+                        <div class="exifdata-download-button">
+                            <button class="download-btn" onclick="saveTextAsFile()">DOWNLOAD FILE</button>
                         </div>
                     </div>
-                    <div class="exifdata-download-button">
-
-                    </div>
-                </div>
             </div>
         </form>
     </div>
@@ -66,11 +69,6 @@
             document.getElementById('exposure').value = exifObject.ExposureTime
             document.getElementById('focus').value = exifObject.FocalLength
             document.getElementById('flash').value = exifObject.Flash
-
-
-            // Uncomment the line below to examine the
-            // EXIF object in console to read other values
-            //console.log(exifObject);
 
         }
 
