@@ -21,9 +21,10 @@
             <div class="content">
                 <div class="image-upload">
                     <div class="image-placeholder" id="image-placeholder">
+
                     </div>
                     <div class="image-upload-button">
-                        <input type="file" name="file" id="file" class="image-upload-input">
+                        <input type="file" name="file" id="file" class="image-upload-input" accept="image/jpg, image/png, image/jpeg, image/NEF">
                         <label for="file">+ CHOOSE FILE FROM YOUR COMPUTER</label>
                     </div>
 
