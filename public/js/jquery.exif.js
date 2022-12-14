@@ -3,10 +3,10 @@
 (function($) {
 
 
-    let BinaryFile = function(strData, iDataOffset, iDataLength) {
-        let data = strData;
-        let dataOffset = iDataOffset || 0;
-        let dataLength = 0;
+    var BinaryFile = function(strData, iDataOffset, iDataLength) {
+        var data = strData;
+        var dataOffset = iDataOffset || 0;
+        var dataLength = 0;
 
         this.getRawData = function() {
             return data;
@@ -31,7 +31,7 @@
         };
 
         this.getSByteAt = function(iOffset) {
-            let iByte = this.getByteAt(iOffset);
+            var iByte = this.getByteAt(iOffset);
             if (iByte > 127)
                 return iByte - 256;
             else
@@ -39,41 +39,41 @@
         };
 
         this.getShortAt = function(iOffset, bBigEndian) {
-            let iShort = bBigEndian ?
+            var iShort = bBigEndian ?
                 (this.getByteAt(iOffset) << 8) + this.getByteAt(iOffset + 1)
                 : (this.getByteAt(iOffset + 1) << 8) + this.getByteAt(iOffset);
             if (iShort < 0) iShort += 65536;
             return iShort;
         };
         this.getSShortAt = function(iOffset, bBigEndian) {
-            let iUShort = this.getShortAt(iOffset, bBigEndian);
+            var iUShort = this.getShortAt(iOffset, bBigEndian);
             if (iUShort > 32767)
                 return iUShort - 65536;
             else
                 return iUShort;
         };
         this.getLongAt = function(iOffset, bBigEndian) {
-            let iByte1 = this.getByteAt(iOffset),
+            var iByte1 = this.getByteAt(iOffset),
                 iByte2 = this.getByteAt(iOffset + 1),
                 iByte3 = this.getByteAt(iOffset + 2),
                 iByte4 = this.getByteAt(iOffset + 3);
 
-            let iLong = bBigEndian ?
+            var iLong = bBigEndian ?
                 (((((iByte1 << 8) + iByte2) << 8) + iByte3) << 8) + iByte4
                 : (((((iByte4 << 8) + iByte3) << 8) + iByte2) << 8) + iByte1;
             if (iLong < 0) iLong += 4294967296;
             return iLong;
         };
         this.getSLongAt = function(iOffset, bBigEndian) {
-            let iULong = this.getLongAt(iOffset, bBigEndian);
+            var iULong = this.getLongAt(iOffset, bBigEndian);
             if (iULong > 2147483647)
                 return iULong - 4294967296;
             else
                 return iULong;
         };
         this.getStringAt = function(iOffset, iLength) {
-            let aStr = [];
-            for (let i=iOffset,j=0;i<iOffset+iLength;i++,j++) {
+            var aStr = [];
+            for (var i=iOffset,j=0;i<iOffset+iLength;i++,j++) {
                 aStr[j] = String.fromCharCode(this.getByteAt(i));
             }
             return aStr.join("");
@@ -91,10 +91,10 @@
     };
 
 
-    let BinaryAjax = (function() {
+    var BinaryAjax = (function() {
 
         function createRequest() {
-            let oHTTP = null;
+            var oHTTP = null;
             if (window.XMLHttpRequest) {
                 oHTTP = new XMLHttpRequest();
             } else if (window.ActiveXObject) {
@@ -104,7 +104,7 @@
         }
 
         function getHead(strURL, fncCallback, fncError) {
-            let oHTTP = createRequest();
+            var oHTTP = createRequest();
             if (oHTTP) {
                 if (fncCallback) {
                     if (typeof(oHTTP.onload) != "undefined") {
@@ -137,14 +137,14 @@
         }
 
         function sendRequest(strURL, fncCallback, fncError, aRange, bAcceptRanges, iFileSize) {
-            let oHTTP = createRequest();
+            var oHTTP = createRequest();
             if (oHTTP) {
 
-                let iDataOffset = 0;
+                var iDataOffset = 0;
                 if (aRange && !bAcceptRanges) {
                     iDataOffset = aRange[0];
                 }
-                let iDataLen = 0;
+                var iDataLen = 0;
                 if (aRange) {
                     iDataLen = aRange[1]-aRange[0]+1;
                 }
@@ -199,10 +199,10 @@
                 getHead(
                     strURL,
                     function(oHTTP) {
-                        let iLength = parseInt(oHTTP.getResponseHeader("Content-Length"),10);
-                        let strAcceptRanges = oHTTP.getResponseHeader("Accept-Ranges");
+                        var iLength = parseInt(oHTTP.getResponseHeader("Content-Length"),10);
+                        var strAcceptRanges = oHTTP.getResponseHeader("Accept-Ranges");
 
-                        let iStart, iEnd;
+                        var iStart, iEnd;
                         iStart = aRange[0];
                         if (aRange[0] < 0)
                             iStart += iLength;
@@ -232,11 +232,11 @@
     );
 
 
-    let EXIF = {};
+    var EXIF = {};
 
     (function() {
 
-        let bDebug = false;
+        var bDebug = false;
 
         EXIF.Tags = {
 
@@ -542,7 +542,7 @@
             BinaryAjax(
                 oImg.src,
                 function(oHTTP) {
-                    let oEXIF = findEXIFinJPEG(oHTTP.binaryResponse);
+                    var oEXIF = findEXIFinJPEG(oHTTP.binaryResponse);
                     oImg.exifdata = oEXIF || {};
                     if (fncCallback) fncCallback();
                 }
@@ -550,21 +550,21 @@
         }
 
         function findEXIFinJPEG(oFile) {
-            let aMarkers = [];
+            var aMarkers = [];
 
             if (oFile.getByteAt(0) != 0xFF || oFile.getByteAt(1) != 0xD8) {
                 return false; // not a valid jpeg
             }
 
-            let iOffset = 2;
-            let iLength = oFile.getLength();
+            var iOffset = 2;
+            var iLength = oFile.getLength();
             while (iOffset < iLength) {
                 if (oFile.getByteAt(iOffset) != 0xFF) {
                     if (bDebug) console.log("Not a valid marker at offset " + iOffset + ", found: " + oFile.getByteAt(iOffset));
                     return false; // not a valid marker, something is wrong
                 }
 
-                let iMarker = oFile.getByteAt(iOffset+1);
+                var iMarker = oFile.getByteAt(iOffset+1);
 
                 // we could implement handling for other markers here,
                 // but we're only looking for 0xFFE1 for EXIF data
@@ -591,11 +591,11 @@
 
         function readTags(oFile, iTIFFStart, iDirStart, oStrings, bBigEnd)
         {
-            let iEntries = oFile.getShortAt(iDirStart, bBigEnd);
-            let oTags = {};
-            for (let i=0;i<iEntries;i++) {
-                let iEntryOffset = iDirStart + i*12 + 2;
-                let strTag = oStrings[oFile.getShortAt(iEntryOffset, bBigEnd)];
+            var iEntries = oFile.getShortAt(iDirStart, bBigEnd);
+            var oTags = {};
+            for (var i=0;i<iEntries;i++) {
+                var iEntryOffset = iDirStart + i*12 + 2;
+                var strTag = oStrings[oFile.getShortAt(iEntryOffset, bBigEnd)];
                 if (!strTag && bDebug) console.log("Unknown tag: " + oFile.getShortAt(iEntryOffset, bBigEnd));
                 oTags[strTag] = readTagValue(oFile, iEntryOffset, iTIFFStart, iDirStart, bBigEnd);
             }
@@ -605,9 +605,9 @@
 
         function readTagValue(oFile, iEntryOffset, iTIFFStart, iDirStart, bBigEnd)
         {
-            let iType = oFile.getShortAt(iEntryOffset+2, bBigEnd);
-            let iNumValues = oFile.getLongAt(iEntryOffset+4, bBigEnd);
-            let iValueOffset = oFile.getLongAt(iEntryOffset+8, bBigEnd) + iTIFFStart;
+            var iType = oFile.getShortAt(iEntryOffset+2, bBigEnd);
+            var iNumValues = oFile.getLongAt(iEntryOffset+4, bBigEnd);
+            var iValueOffset = oFile.getLongAt(iEntryOffset+8, bBigEnd) + iTIFFStart;
 
             switch (iType) {
                 case 1: // byte, 8-bit unsigned int
@@ -615,9 +615,9 @@
                     if (iNumValues == 1) {
                         return oFile.getByteAt(iEntryOffset + 8, bBigEnd);
                     } else {
-                        let iValOffset = iNumValues > 4 ? iValueOffset : (iEntryOffset + 8);
-                        let aVals = [];
-                        for (let n=0;n<iNumValues;n++) {
+                        var iValOffset = iNumValues > 4 ? iValueOffset : (iEntryOffset + 8);
+                        var aVals = [];
+                        for (var n=0;n<iNumValues;n++) {
                             aVals[n] = oFile.getByteAt(iValOffset + n);
                         }
                         return aVals;
@@ -625,7 +625,7 @@
                     break;
 
                 case 2: // ascii, 8-bit byte
-                    let iStringOffset = iNumValues > 4 ? iValueOffset : (iEntryOffset + 8);
+                    var iStringOffset = iNumValues > 4 ? iValueOffset : (iEntryOffset + 8);
                     return oFile.getStringAt(iStringOffset, iNumValues-1);
                 // break;
 
@@ -633,9 +633,9 @@
                     if (iNumValues == 1) {
                         return oFile.getShortAt(iEntryOffset + 8, bBigEnd);
                     } else {
-                        let iValOffset = iNumValues > 2 ? iValueOffset : (iEntryOffset + 8);
-                        let aVals = [];
-                        for (let n=0;n<iNumValues;n++) {
+                        var iValOffset = iNumValues > 2 ? iValueOffset : (iEntryOffset + 8);
+                        var aVals = [];
+                        for (var n=0;n<iNumValues;n++) {
                             aVals[n] = oFile.getShortAt(iValOffset + 2*n, bBigEnd);
                         }
                         return aVals;
@@ -646,8 +646,8 @@
                     if (iNumValues == 1) {
                         return oFile.getLongAt(iEntryOffset + 8, bBigEnd);
                     } else {
-                        let aVals = [];
-                        for (let n=0;n<iNumValues;n++) {
+                        var aVals = [];
+                        for (var n=0;n<iNumValues;n++) {
                             aVals[n] = oFile.getLongAt(iValueOffset + 4*n, bBigEnd);
                         }
                         return aVals;
@@ -657,8 +657,8 @@
                     if (iNumValues == 1) {
                         return oFile.getLongAt(iValueOffset, bBigEnd) / oFile.getLongAt(iValueOffset+4, bBigEnd);
                     } else {
-                        let aVals = [];
-                        for (let n=0;n<iNumValues;n++) {
+                        var aVals = [];
+                        for (var n=0;n<iNumValues;n++) {
                             aVals[n] = oFile.getLongAt(iValueOffset + 8*n, bBigEnd) / oFile.getLongAt(iValueOffset+4 + 8*n, bBigEnd);
                         }
                         return aVals;
@@ -668,8 +668,8 @@
                     if (iNumValues == 1) {
                         return oFile.getSLongAt(iEntryOffset + 8, bBigEnd);
                     } else {
-                        let aVals = [];
-                        for (let n=0;n<iNumValues;n++) {
+                        var aVals = [];
+                        for (var n=0;n<iNumValues;n++) {
                             aVals[n] = oFile.getSLongAt(iValueOffset + 4*n, bBigEnd);
                         }
                         return aVals;
@@ -679,8 +679,8 @@
                     if (iNumValues == 1) {
                         return oFile.getSLongAt(iValueOffset, bBigEnd) / oFile.getSLongAt(iValueOffset+4, bBigEnd);
                     } else {
-                        let aVals = [];
-                        for (let n=0;n<iNumValues;n++) {
+                        var aVals = [];
+                        for (var n=0;n<iNumValues;n++) {
                             aVals[n] = oFile.getSLongAt(iValueOffset + 8*n, bBigEnd) / oFile.getSLongAt(iValueOffset+4 + 8*n, bBigEnd);
                         }
                         return aVals;
@@ -697,9 +697,9 @@
                 return false;
             }
 
-            let bBigEnd;
+            var bBigEnd;
 
-            let iTIFFOffset = iStart + 6;
+            var iTIFFOffset = iStart + 6;
 
             // test for TIFF validity and endianness
             if (oFile.getShortAt(iTIFFOffset) == 0x4949) {
@@ -721,11 +721,11 @@
                 return false;
             }
 
-            let oTags = readTags(oFile, iTIFFOffset, iTIFFOffset+8, EXIF.TiffTags, bBigEnd);
+            var oTags = readTags(oFile, iTIFFOffset, iTIFFOffset+8, EXIF.TiffTags, bBigEnd);
 
             if (oTags.ExifIFDPointer) {
-                let oEXIFTags = readTags(oFile, iTIFFOffset, iTIFFOffset + oTags.ExifIFDPointer, EXIF.Tags, bBigEnd);
-                for (let strTag in oEXIFTags) {
+                var oEXIFTags = readTags(oFile, iTIFFOffset, iTIFFOffset + oTags.ExifIFDPointer, EXIF.Tags, bBigEnd);
+                for (var strTag in oEXIFTags) {
                     switch (strTag) {
                         case "LightSource" :
                         case "Flash" :
@@ -763,8 +763,8 @@
             }
 
             if (oTags.GPSInfoIFDPointer) {
-                let oGPSTags = readTags(oFile, iTIFFOffset, iTIFFOffset + oTags.GPSInfoIFDPointer, EXIF.GPSTags, bBigEnd);
-                for (let strTag in oGPSTags) {
+                var oGPSTags = readTags(oFile, iTIFFOffset, iTIFFOffset + oTags.GPSInfoIFDPointer, EXIF.GPSTags, bBigEnd);
+                for (var strTag in oGPSTags) {
                     switch (strTag) {
                         case "GPSVersionID" :
                             oGPSTags[strTag] = oGPSTags[strTag][0]
@@ -783,7 +783,7 @@
 
         EXIF.getData = function(oImg, fncCallback)
         {
-            if (!oImg.complete) return false;
+            if (!oImg.compvare) return false;
             if (!imageHasData(oImg)) {
                 getImageData(oImg, fncCallback);
             } else {
@@ -801,9 +801,9 @@
         EXIF.getAllTags = function(oImg)
         {
             if (!imageHasData(oImg)) return {};
-            let oData = oImg.exifdata;
-            let oAllTags = {};
-            for (let a in oData) {
+            var oData = oImg.exifdata;
+            var oAllTags = {};
+            for (var a in oData) {
                 if (oData.hasOwnProperty(a)) {
                     oAllTags[a] = oData[a];
                 }
@@ -814,9 +814,9 @@
         EXIF.pretty = function(oImg)
         {
             if (!imageHasData(oImg)) return "";
-            let oData = oImg.exifdata;
-            let strPretty = "";
-            for (let a in oData) {
+            var oData = oImg.exifdata;
+            var strPretty = "";
+            for (var a in oData) {
                 if (oData.hasOwnProperty(a)) {
                     if (typeof oData[a] == "object") {
                         strPretty += a + " : [" + oData[a].length + " values]\r\n";
@@ -840,7 +840,7 @@
         };
 
         $.fn.exif = function(strTag) {
-            let aStrings = [];
+            var aStrings = [];
             this.each(function() {
                 aStrings.push(EXIF.getTag(this, strTag));
             });
@@ -848,7 +848,7 @@
         };
 
         $.fn.exifAll = function() {
-            let aStrings = [];
+            var aStrings = [];
             this.each(function() {
                 aStrings.push(EXIF.getAllTags(this));
             });
@@ -856,14 +856,14 @@
         };
 
         $.fn.exifPretty = function() {
-            let aStrings = [];
+            var aStrings = [];
             this.each(function() {
                 aStrings.push(EXIF.pretty(this));
             });
             return aStrings;
         };
 
-        let getFilePart = function(file) {
+        var getFilePart = function(file) {
             if (file.slice) {
                 filePart = file.slice(0, 131072);
             } else if (file.webkitSlice) {
@@ -878,12 +878,12 @@
         };
 
         $.fn.fileExif = function(callback) {
-            let reader = new FileReader();
+            var reader = new FileReader();
 
             reader.onload = function(event) {
-                let content = event.target.result;
+                var content = event.target.result;
 
-                let binaryResponse = new BinaryFile(content);
+                var binaryResponse = new BinaryFile(content);
 
                 callback(EXIF.readFromBinaryFile(binaryResponse));
             };
@@ -892,12 +892,12 @@
         };
 
         $.fileExif = function(file, callback) {
-            let reader = new FileReader();
+            var reader = new FileReader();
 
             reader.onload = function(event) {
-                let content = event.target.result;
+                var content = event.target.result;
 
-                let binaryResponse = new BinaryFile(content);
+                var binaryResponse = new BinaryFile(content);
 
                 callback(EXIF.readFromBinaryFile(binaryResponse));
             };

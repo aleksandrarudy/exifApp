@@ -11,8 +11,9 @@ function getImgData() {
         const fileReader = new FileReader();
         fileReader.readAsDataURL(files);
         fileReader.addEventListener("load", function () {
-            imgPreview.style.display = "block";
+            imgPreview.style.display = "flex";
             imgPreview.innerHTML = '<img src="' + this.result + '" />';
         });
     }
 }
+

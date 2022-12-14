@@ -22,7 +22,6 @@ p{
 }
 
 .image-placeholder{
-    display: flex;
     justify-content: center;
     width: 54vw;
     height: 75vh;

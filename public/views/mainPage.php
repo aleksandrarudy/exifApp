@@ -46,12 +46,11 @@
                                 <label for="aperture">aperture</label></br>
                                 <input type="text" name="aperture" id="aperture" placeholder="ex. f/1.8" /> </br>
 
-                                <label for="focus">focus length</label></br>
+                                <label for="focus">focal length</label></br>
                                 <input type="text" name="focus" id="focus" placeholder="ex. 35mm"/> </br>
 
                                 <label for="flash">flash</label></br>
                                 <input type="text" name="flash" id="flash" placeholder="ex. Flash fired"/> </br>
-
                             </div>
                         </div>
                         <div class="exifdata-download-button">
