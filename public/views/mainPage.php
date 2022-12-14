@@ -24,7 +24,7 @@
 
                     </div>
                     <div class="image-upload-button">
-                        <input type="file" name="file" id="file" class="image-upload-input" accept="image/jpg, image/png, image/jpeg, image/NEF">
+                        <input type="file" name="file" id="file" class="image-upload-input" accept="image/jpg, image/jpeg">
                         <label for="file">+ CHOOSE FILE FROM YOUR COMPUTER</label>
                     </div>
 
@@ -62,7 +62,6 @@
         </form>
     </div>
     <script>
-
         let someCallback = function(exifObject) {
             document.getElementById('cameraModel').value = exifObject.Model
             document.getElementById('aperture').value = exifObject.FNumber
@@ -70,7 +69,6 @@
             document.getElementById('exposure').value = exifObject.ExposureTime
             document.getElementById('focus').value = exifObject.FocalLength
             document.getElementById('flash').value = exifObject.Flash
-
         }
 
         try {
@@ -81,7 +79,6 @@
         catch (e) {
             alert(e);
         }
-
     </script>
 </body>
 </html>
